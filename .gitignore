@@ -1,0 +1,22 @@
+
+# Virtual environment
+dbt_venv/
+
+# Airflow runtime files
+logs/
+airflow.db
+airflow.db-shm
+airflow.db-wal
+simple_auth_manager_passwords.json.generated
+
+# dbt build artifacts
+target/
+dbt_packages/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
