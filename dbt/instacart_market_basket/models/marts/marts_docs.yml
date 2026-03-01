@@ -1,0 +1,15 @@
+version: 2
+models:
+  - name: mart_customer_behavior
+    description:  "Aggregated analytics mart providing insights into customer purchasing patterns,including order frequency, reorder tendencies, and basket size metrics."
+      
+
+  - name: mart_product_performance
+    description:  "Analytics mart summarizing product-level performance metrics such as purchase frequency, reorder rates, and popularity rankings."
+
+  - name: mart_department_performance
+    description:  "Aggregated view of department-level sales performance and purchasing trends."
+
+  - name: mart_time_analysis
+    description: "Time-series analytics mart used to analyze ordering behavior across days and hours."
+      

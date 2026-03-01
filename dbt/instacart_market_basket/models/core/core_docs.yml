@@ -1,0 +1,85 @@
+version: 2
+
+models:
+  - name: products_dim
+    description: "Dimension table containing enriched product attributes. Each record represents a unique product available in the Instacart platform."
+
+    columns:
+      - name: product_id
+        description: "Unique identifier for the product."
+        tests:
+          - not_null
+          - unique
+
+      - name: product_name
+        description: "Human-readable name of the product."
+        tests:
+          - not_null
+
+      - name: aisle_id
+        description: "Identifier of the aisle category for the product."
+
+      - name: department_id
+        description: "Identifier of the department category for the product."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('departments_stg')
+                field: department_id 
+
+
+  - name: users_dim
+    description: "Dimension table representing customers. Each row corresponds to a unique Instacart user."
+
+    columns:
+      - name: user_id
+        description: "Unique identifier representing a customer."
+        tests:
+          - not_null
+          - unique
+
+
+  - name: time_dim
+    description: "Date dimension table used for time-based analytics and reporting."
+
+    columns:
+      - name: date_day
+        description: "Calendar date used for joining with time-based facts."
+        tests:
+          - not_null
+          - unique
+
+
+  - name: fact_order_items
+    description: "Fact table capturing individual product purchases within customer orders. Each record represents a product included in an order transaction."
+
+    columns:
+      - name: order_id
+        description: "Identifier of the order containing the purchased product."
+        tests:
+          - not_null
+
+      - name: product_id
+        description: "Identifier of the purchased product."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('products_dim')
+                field: product_id
+
+      - name: user_id
+        description: "Identifier of the customer who placed the order."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('users_dim')
+                field: user_id
+
+      - name: add_to_cart_order
+        description: "Sequence number indicating when the product was added to the cart."
+
+      - name: is_reordered
+        description: "Boolean flag indicating whether the product was previously purchased by the customer."

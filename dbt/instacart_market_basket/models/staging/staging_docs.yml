@@ -1,0 +1,54 @@
+version: 2
+models:
+
+  - name: orders_stg
+    description: "Cleaned staging model for order-level data.Standardizes raw order attributes and prepares them for dimensional modeling."
+
+    columns:
+      - name: order_id
+        description: "Unique identifier for each customer order."
+        tests:
+          - unique
+          - not_null
+      - name: user_id
+        description: "Unique identifier representing the customer placing the order."
+        tests:
+          - not_null
+      - name: eval_set
+        description: "Dataset partition indicator (prior, train, or test)."
+
+      - name: order_number
+        description: "Sequential number representing the customer's order history."
+
+      - name: order_dow
+        description: "Day of week when the order was placed."
+
+      - name: order_hour_of_day
+        description: "Hour of day when the order was placed."
+
+      - name: days_since_prior_order
+        description: "Number of days since the customer's previous order."
+
+
+  - name: products_stg
+    description: "Standardized staging model for product-level master data."
+
+    columns:
+      - name: product_id
+        description: "Unique identifier for each product."
+
+      - name: product_name
+        description: "Name of the product as displayed in the Instacart catalog."
+
+      - name: aisle_id
+        description: "Foreign key referencing the aisle classification."
+
+      - name: department_id
+        description: "Foreign key referencing the department classification."
+
+
+  - name: aisles_stg
+    description: "Staging model for aisle classification data."
+
+  - name: departments_stg
+    description: "Staging model for department classification data."

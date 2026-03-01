@@ -1,0 +1,24 @@
+dbt_project:
+  outputs:
+    dev:
+      dbname: consumer_behaviour
+      host: host.docker.internal
+      pass: '#Ramp577224'
+      port: 5432
+      schema: public
+      threads: 4
+      type: postgres
+      user: postgres
+  target: dev
+instacart_market_basket:
+  outputs:
+    dev:
+      dbname: instacart_market_basket
+      host: host.docker.internal
+      pass: '#Ramp577224'
+      port: 5432
+      schema: public
+      threads: 4
+      type: postgres
+      user: postgres
+  target: dev

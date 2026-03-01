@@ -1,0 +1,4 @@
+segment,min_orders,max_orders
+NEW,0,5
+REGULAR,6,30
+LOYAL,31,9999

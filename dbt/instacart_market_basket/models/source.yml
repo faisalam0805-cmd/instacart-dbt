@@ -1,0 +1,22 @@
+version: 2
+
+sources:
+  - name: instacart
+    description: "Raw transactional data ingested from the Instacart Market Basket dataset."
+    schema: raw
+
+    tables:
+      - name: orders
+        description: "Raw order-level dataset containing customer purchase events and timing attributes."
+
+      - name: products
+        description: "Master product dataset containing product names and categorical hierarchy."
+
+      - name: aisles
+        description: "Lookup table containing aisle classification for products."
+      - name: departments
+        description: "Lookup table containing department-level product categorization."
+      - name: prior_products_order
+        description: "Raw historical mapping between orders and products purchased."
+      - name: train_products_order
+        description: "Raw training mapping between orders and products purchased."
