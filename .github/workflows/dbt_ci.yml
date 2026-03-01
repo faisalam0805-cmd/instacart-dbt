@@ -37,5 +37,5 @@ jobs:
     - name: Run dbt parse
       run: dbt parse --profiles-dir .
 
-    - name: Run dbt compile
-      run: dbt compile --profiles-dir .
+    - name: Run dbt compile without DB connection
+      run: dbt compile --profiles-dir .--target ci
