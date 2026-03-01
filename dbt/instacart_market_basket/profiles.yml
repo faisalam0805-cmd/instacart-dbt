@@ -21,4 +21,13 @@ instacart_market_basket:
       threads: 4
       type: postgres
       user: postgres
+    ci:
+      type: postgres
+      host: localhost
+      user: postgres
+      password: postgres
+      port: 5432
+      dbname: postgres
+      schema: public
+      threads: 1
   target: dev
