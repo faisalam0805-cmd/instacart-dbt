@@ -1,0 +1,70 @@
+name: Deploy dbt Docs
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+
+  generate-docs:
+
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: instacart
+        ports:
+          - 5432:5432
+
+    defaults:
+      run:
+        working-directory: dbt/instacart_market_basket
+
+    steps:
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dbt
+        run: pip install dbt-postgres
+
+      - name: Wait for Postgres
+        run: |
+          until pg_isready -h localhost -p 5432 -U postgres
+          do
+            sleep 2
+          done
+
+      - name: Generate dbt docs
+        run: |
+          dbt deps --profiles-dir .
+          dbt docs generate --profiles-dir . --target ci
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dbt/instacart_market_basket/target
+
+  deploy-docs:
+
+    needs: generate-docs
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
