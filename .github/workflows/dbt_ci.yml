@@ -7,9 +7,24 @@ on:
 
 jobs:
 
-  dbt-validation:
+  dbt-ci:
 
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: instacart
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     defaults:
       run:
@@ -17,25 +32,27 @@ jobs:
 
     steps:
 
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.11"
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-    - name: Install dbt
-      run: pip install dbt-postgres
+      - name: Install dbt
+        run: pip install dbt-postgres
 
-    - name: Validate dbt installation
-      run: dbt --version
+      - name: Wait for Postgres
+        run: |
+          until pg_isready -h localhost -p 5432 -U postgres
+          do
+            echo "Waiting for postgres..."
+            sleep 2
+          done
 
-    - name: Run dbt deps
-      run: dbt deps
+      - name: Run dbt deps
+        run: dbt deps --profiles-dir .
 
-    - name: Run dbt parse
-      run: dbt parse --profiles-dir .
-
-    - name: Run dbt compile without DB connection
-      run: dbt compile --profiles-dir . --target ci
+      - name: Run dbt compile
+        run: dbt compile --profiles-dir . --target ci
