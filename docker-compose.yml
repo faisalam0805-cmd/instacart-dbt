@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+
+  airflow:
+    image: faisal-airflow:latest
+    container_name: airflow
+    restart: always
+
+    volumes:
+      # Airflow folders
+      - D:/Airflow_workspace/airflow/dags:/opt/airflow/dags
+      - D:/Airflow_workspace/airflow/logs:/opt/airflow/logs
+      - D:/Airflow_workspace/airflow/plugins:/opt/airflow/plugins
+
+      # dbt project folder (contains profiles.yml)
+      - D:/Airflow_workspace/airflow/dbt:/opt/airflow/dbt
+
+      - D:/Airflow_workspace/airflow/dbt_venv:/opt/airflow/dbt_venv
+
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      AIRFLOW_HOME: /opt/airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+
+      # CRITICAL: tells dbt where profiles.yml is
+      DBT_PROFILES_DIR: /opt/airflow/dbt/instacart_market_basket
+
+    command: >
+      bash -c "
+      airflow db migrate &&
+      airflow standalone
+      "
