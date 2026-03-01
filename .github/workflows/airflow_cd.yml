@@ -1,0 +1,24 @@
+name: CD - Airflow DAG Validation
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+
+  validate-airflow:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Install Airflow
+      run: |
+        pip install apache-airflow
+
+    - name: Validate DAG syntax
+      run: |
+        python dags/instacart_dbt_pipeline.py

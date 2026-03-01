@@ -1,0 +1,22 @@
+name: CI - Docker Build Validation
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+
+  docker-build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Build Docker image
+      run: docker build -t instacart-airflow .
+
+    - name: Verify Docker image
+      run: docker images
